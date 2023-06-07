@@ -58,6 +58,8 @@ jobs:
 
     - name: Generate key
       run: php artisan key:generate
+    - name: Cache config (needed after generating key)
+      run: php artisan config:cache
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache public/htmlfiledownload public/htmlmaildownload
 #    - name: Run Migrations
