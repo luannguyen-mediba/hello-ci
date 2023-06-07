@@ -71,6 +71,15 @@ jobs:
 
 #      run: php artisan migrate
 
+    - name: Build LHA
+      run: |
+        echo ${{ github.workspace }}
+        echo $GITHUB_WORKSPACE
+        cd storage/framework
+        ./configure
+        make && make install
+        cd ${{ github.workspace }}
+
     - name: Create Database
       run: |
         mkdir -p database
