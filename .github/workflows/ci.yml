@@ -15,7 +15,7 @@ jobs:
       matrix:
         operating-system: [ubuntu-latest]
         php-versions: [ '8.1' ]
-        dependency-stability: [ 'prefer-none' ],
+        dependency-stability: [ 'prefer-none' ]
         laravel: ['9.x']
 
     name: PHP-${{ matrix.php-versions }} - Laravel-${{ matrix.laravel }} - ${{ matrix.operating-system}}
