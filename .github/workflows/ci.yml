@@ -15,9 +15,10 @@ jobs:
       matrix:
         operating-system: [ubuntu-latest]
         php-versions: [ '8.1' ]
-        dependency-stability: [ 'prefer-none' ]
+        dependency-stability: [ 'prefer-none' ],
+        laravel: ['9.x']
 
-    name: P${{ matrix.php-versions }} - L${{ matrix.laravel }} - ${{ matrix.dependency-stability }} - ${{ matrix.operating-system}}
+    name: PHP-${{ matrix.php-versions }} - Laravel-${{ matrix.laravel }} - ${{ matrix.operating-system}}
 
     steps:
     - name: Install PHP versions
@@ -76,6 +77,9 @@ jobs:
         echo ${{ github.workspace }}
         echo $GITHUB_WORKSPACE
         cd storage/framework
+        tar zxvf lha-1.14i-ac20050924p1.tar.gz
+        cd lha-1.14i-ac20050924p1
+        pwd
         ./configure
         make && make install
         cd ${{ github.workspace }}
