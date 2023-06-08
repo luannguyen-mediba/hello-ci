@@ -81,7 +81,7 @@ jobs:
         cd lha-1.14i-ac20050924p1
         pwd
         ./configure
-        make && make install
+        sudo make && sudo make install
         cd ${{ github.workspace }}
 
     - name: Create Database
