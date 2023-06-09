@@ -18,7 +18,7 @@ jobs:
         dependency-stability: [ 'prefer-none' ]
         laravel: ['9.x']
 
-    name: PHP-${{ matrix.php-versions }} - Laravel-${{ matrix.laravel }} - ${{ matrix.operating-system}}
+    name: PHP-${{ matrix.php-versions }} - Lara-${{ matrix.laravel }} - ${{ matrix.operating-system}}
 
     steps:
     - name: Install PHP versions
@@ -82,6 +82,7 @@ jobs:
         pwd
         ./configure
         sudo make && sudo make install
+        /usr/local/bin/lha --version
         cd ${{ github.workspace }}
 
     - name: Create Database
