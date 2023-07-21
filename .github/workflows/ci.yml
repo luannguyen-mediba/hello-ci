@@ -2,9 +2,9 @@ name: Test Laravel
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main-huhu" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main-huhu" ]
 
 jobs:
   laravel-tests:
@@ -45,24 +45,36 @@ jobs:
         path: vendor
         key: ${{ runner.OS }}-build-${{ hashFiles('**/composer.lock') }}
     - name: Copy .env
+      working-directory: ${{ github.workspace }}/laravel
       run: php -r "file_exists('.env') || copy('.env.testing', '.env');"
     - name: Install Dependencies
+      working-directory: ${{ github.workspace }}/laravel
       if: steps.vendor-cache.outputs.cache-hit != 'true'
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
     - name: Update Dependencies with latest stable
+      working-directory: ${{ github.workspace }}/laravel
       if: matrix.dependency-stability == 'prefer-stable'
       run: composer update --prefer-stable
+
     - name: Update Dependencies with lowest stable
+      working-directory: ${{ github.workspace }}/laravel
       if: matrix.dependency-stability == 'prefer-lowest'
       run: composer update --prefer-stable --prefer-lowest
 
     - name: Generate key
+      working-directory: ${{ github.workspace }}/laravel
       run: php artisan key:generate
-    - name: Cache config (needed after generating key)
-      run: php artisan config:cache
+    
+    # Should not cache when run CI
+    #- name: Cache config (needed after generating key)
+    #  working-directory: ${{ github.workspace }}/laravel
+    #  run: php artisan config:cache
+
     - name: Directory Permissions
+      working-directory: ${{ github.workspace }}/laravel
       run: chmod -R 777 storage bootstrap/cache public/htmlfiledownload public/htmlmaildownload
+
 #    - name: Run Migrations
 # Set environment
 #      env:
@@ -73,6 +85,7 @@ jobs:
 #      run: php artisan migrate
 
     - name: Build LHA
+      working-directory: ${{ github.workspace }}/laravel
       run: |
         echo ${{ github.workspace }}
         echo $GITHUB_WORKSPACE
@@ -86,25 +99,21 @@ jobs:
         cd ${{ github.workspace }}
 
     - name: Create Database
+      working-directory: ${{ github.workspace }}/laravel
       run: |
         mkdir -p database
         touch database/database.sqlite
 
     - name: Show dir
+      working-directory: ${{ github.workspace }}/laravel
       run: pwd
+
     - name: PHP Version
+      working-directory: ${{ github.workspace }}/laravel
       run: php --version
 
-# Code quality
-#    - name: Execute tests (Unit and Feature tests) via PHPUnit
-# Set environment
-#      env:
-#        SESSION_DRIVER: array
-#        DB_CONNECTION: sqlite
-#        DB_DATABASE: ":memory:"
-
-#      run: vendor/bin/phpunit --testsuit Basic
     - name: Execute tests (Unit and Feature tests) via PHPUnit
+      working-directory: ${{ github.workspace }}/laravel
       env:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
