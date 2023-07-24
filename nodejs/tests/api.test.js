@@ -146,13 +146,14 @@ describe("Testing upload image and store location with Api Key", () => {
             ]
         }];
 
-        const noOfUsersPerday = 1
-        const noOfLocationsPerday = 1
+        const noOfUsersPerday = process.env.NUMBER_OF_USER || 3
+        const noOfLocationsPerday = process.env.NUMBER_OF_LOCATION || 20
         const dataSet = [];
+
         for (let idxUser = 0; idxUser < noOfUsersPerday; idxUser++) {
             for (let idxLocation = 0; idxLocation < noOfLocationsPerday; idxLocation++) {
                 const locationItem = {
-                    location_id: `9000${idxLocation}`,
+                    location_id: `9100${idxLocation}`,
                     user_name: `Jester ${idxUser}`,
                     title: `Location name 9000${idxLocation}`,
                     content: `Test desc\ntest desc\ntest desc\ntest desc 9000${idxLocation}`
@@ -179,12 +180,12 @@ describe("Testing upload image and store location with Api Key", () => {
             'Call API matrix',
             async (locationItem) => {
                 const images = [];
-
+                let imageName = process.env.IMAGE || '9MB.jpg'
                 for (let index = 1; index <= 10; index++) {
                     const response = await request
                         .post('/front/image')
                         .field('location', locationItem.location_id)
-                        .attach('image', 'tests/fixtures/9MB.jpg')
+                        .attach('image', `tests/fixtures/${imageName}`)
                         .set('x-api-key', API_KEY)
                     expect(response.statusCode).toBe(200);
                     const imgBody = response.body;
